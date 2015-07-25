@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<title>room</title>
+
+	<link rel="stylesheet" type="text/css" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="/css/keen-dashboards.css" />
+
+</head>
+
+<body class="application">
+
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="./">room</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid">
+
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="chart-wrapper">
+					<div class="chart-title">
+						Temperature
+					</div>
+					<div class="chart-stage" id="chart1">
+							
+					</div>
+					<div class="chart-notes">
+						Current temperature in degrees.
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-9">
+				<div class="chart-wrapper" >
+					<div class="chart-title">
+						Temperature
+					</div>
+					<div class="chart-stage" id="chart2">
+							
+					</div>
+					<div class="chart-notes">
+						Histogram of temperature.
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="chart-wrapper">
+					<div class="chart-title">
+						Sound
+					</div>
+					<div class="chart-stage">
+							<img data-src="holder.js/100%x120/white">
+					</div>
+					<div class="chart-notes">
+						Notes about this chart
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-9">
+				<div class="chart-wrapper">
+					<div class="chart-title">
+						Sound
+					</div>
+					<div class="chart-stage">
+							<img data-src="holder.js/100%x120/white">
+					</div>
+					<div class="chart-notes">
+						Notes about this chart
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="chart-wrapper">
+					<div class="chart-title">
+						Light
+					</div>
+					<div class="chart-stage">
+							<img data-src="holder.js/100%x120/white">
+					</div>
+					<div class="chart-notes">
+						Current ambient light level.
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-9">
+				<div class="chart-wrapper">
+					<div class="chart-title">
+						Light
+					</div>
+					<div class="chart-stage">
+							<img data-src="holder.js/100%x120/white">
+					</div>
+					<div class="chart-notes">
+						Past levels
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-3">
+				<div id='chart7' class="chart-wrapper">
+					<div class="chart-title">
+						Methane
+					</div>
+					<div class="chart-stage">
+							<img data-src="holder.js/100%x120/white">
+					</div>
+					<div class="chart-notes">
+						Current methane levels.
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-9">
+				<div class="chart-wrapper">
+					<div class="chart-title">
+						Methane
+					</div>
+					<div class="chart-stage">
+							<img data-src="holder.js/100%x120/white">
+					</div>
+					<div class="chart-notes">
+						Methane levels over time.
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<hr>
+
+		<p class="small text-muted">Modulated &copy;</p>
+
+	</div>
+
+	<script type="text/javascript" src="/lib/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
+	<script type="text/javascript" src="/lib/holderjs/holder.js"></script>
+	<script>
+		Holder.add_theme("white", { background:"#fff", foreground:"#a7a7a7", size:10 });
+	</script>
+
+	<script type="text/javascript" src="/lib/keen-js/dist/keen.min.js"></script>
+	<script type="text/javascript" src="/js/graph.js"></script>
+
+</body>
+</html>
