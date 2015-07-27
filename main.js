@@ -5,8 +5,8 @@ var graphUpdate = function() {
 		dataType: 'json'
 	})
 	.done(function() {
-		console.log("success");
-		console.dir(jsonResponse);
+		//console.log("success");
+		//console.dir(jsonResponse);
 
 		var data = {
 		
@@ -266,5 +266,6 @@ var options = {
 	legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
 };
 
-setTimeout(graphUpdate(), 60000);
+graphUpdate();
+setInterval(graphUpdate, 60000);
 
