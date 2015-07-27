@@ -1,63 +1,85 @@
 //JSON Load
-var jsonResponse = $.ajax({
-	url: 'http://data.sparkfun.com/output/MGwwxLpvNmcMrvEm2dYV.json?page=1',
-	dataType: 'json'
-})
-.done(function() {
-	console.log("success");
-	console.dir(jsonResponse);
+var graphUpdate = function() { 
+	var jsonResponse = $.ajax({
+		url: 'http://data.sparkfun.com/output/MGwwxLpvNmcMrvEm2dYV.json?page=1',
+		dataType: 'json'
+	})
+	.done(function() {
+		console.log("success");
+		console.dir(jsonResponse);
 
-	var data = {
-	
-		labels: [],
+		var data = {
+		
+			labels: [],
 
-		datasets: [
-				{
-					label: "temp",
-					fillColor: "rgba(220,220,220,0.2)",
-					strokeColor: "rgba(220,220,220,1)",
-					pointColor: "rgba(220,220,220,1)",
-					pointStrokeColor: "#fff",
-					pointHighlightFill: "#fff",
-					pointHighlightStroke: "rgba(220,220,220,1)",
-					data: [20,20]
-				},
-				{
-					label: "sound",
-					fillColor: "rgba(151,187,205,0.2)",
-					strokeColor: "rgba(151,187,205,1)",
-					pointColor: "rgba(151,187,205,1)",
-					pointStrokeColor: "#fff",
-					pointHighlightFill: "#fff",
-					pointHighlightStroke: "rgba(151,187,205,1)",
-					data: [0,2]
-				}
-			]
-	};
+			datasets: [
+					{
+						label: "temp",
+						fillColor: "rgba(220,220,220,0.2)",
+						strokeColor: "rgba(220,220,220,1)",
+						pointColor: "rgba(220,220,220,1)",
+						pointStrokeColor: "#fff",
+						pointHighlightFill: "#fff",
+						pointHighlightStroke: "rgba(220,220,220,1)",
+						data: []
+					},
+					{
+						label: "sound",
+						fillColor: "rgba(151,187,205,0.2)",
+						strokeColor: "rgba(151,187,205,1)",
+						pointColor: "rgba(151,187,205,1)",
+						pointStrokeColor: "#fff",
+						pointHighlightFill: "#fff",
+						pointHighlightStroke: "rgba(151,187,205,1)",
+						data: []
+					},
+				/*	{
+						label: "gas",
+						fillColor: "rgba(151,187,205,0.0)",
+						strokeColor: "rgba(151,187,205,1)",
+						pointColor: "rgba(151,187,205,1)",
+						pointStrokeColor: "#fff",
+						pointHighlightFill: "#fff",
+						pointHighlightStroke: "rgba(151,187,205,1)",
+						data: []
+					},*/
+					{
+						label: "light",
+						fillColor: "rgba(205,187,142,0.2)",
+						strokeColor: "rgba(205,187,142,1)",
+						pointColor: "rgba(205,187,142,1)",
+						pointStrokeColor: "#fff",
+						pointHighlightFill: "#fff",
+						pointHighlightStroke: "rgba(205,187,142,1)",
+						data: []
+					}
+				]
+		};
 
-	//fill x axis labels from data
-	// TODO - convert timestamp to string
-	
-	for (var i=0; i < jsonResponse.responseJSON.length; i++) {
-		data.labels[i] = JSON.stringify(jsonResponse.responseJSON[i].timestamp);
-	}
-
-	//parse data for each variable
-	for (var i=0; i < 2; i++) {
-		for (var j=0; j < jsonResponse.responseJSON.length; j++) {
-			data.datasets[i].data[j] = jsonResponse.responseJSON[j][data.datasets[i].label];
-			//console.log(jsonResponse.responseJSON[j][data.datasets[i].label]);
+		//fill x axis labels from data
+		// TODO - convert timestamp to string
+		
+		for (var i=0; i < jsonResponse.responseJSON.length; i++) {
+			var time = moment(jsonResponse.responseJSON[i].timestamp);
+			data.labels[i] = moment(time).format("h:mma, DD.MM.YY");
 		}
-	}
 
-	//render chart when data ready
-	var myChart1 = new Chart(ctx).Line(data, options);
-})
+		//parse data for each variable
+		for (var i=0; i < data.datasets.length; i++) {
+			for (var j=0; j < jsonResponse.responseJSON.length; j++) {
+				data.datasets[i].data[j] = jsonResponse.responseJSON[j][data.datasets[i].label];
+				// console.log(jsonResponse.responseJSON[j][data.datasets[i].label]);
+			}
+		}
 
-.fail(function() {
-	console.log("error");
-});
+		//render chart when data ready
+		var myChart1 = new Chart(ctx).Line(data, options);
+	})
 
+	.fail(function() {
+		console.log("error");
+	});
+};
 
 // Chart GLobals Config
 
@@ -124,10 +146,10 @@ Chart.defaults.global = {
 	scaleFontColor: "#666",
 
 	// Boolean - whether or not the chart should be responsive and resize when the browser does.
-	responsive: false,
+	responsive: true,
 
 	// Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-	maintainAspectRatio: true,
+	maintainAspectRatio: false,
 
 	// Boolean - Determines whether to draw tooltips on the canvas or not
 	showTooltips: true,
@@ -139,7 +161,7 @@ Chart.defaults.global = {
 	tooltipEvents: ["mousemove", "touchstart", "touchmove"],
 
 	// String - Tooltip background colour
-	tooltipFillColor: "rgba(0,0,0,0.8)",
+	tooltipFillColor: "rgba(0,0,0,0.4)",
 
 	// String - Tooltip label font declaration for the scale label
 	tooltipFontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
@@ -184,7 +206,7 @@ Chart.defaults.global = {
 	tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %>",
 
 	// String - Template string for multiple tooltips
-	multiTooltipTemplate: "<%= value %>",
+	multiTooltipTemplate: "<%= datasetLabel %>: <%= value %>",
 
 	// Function - Will fire on animation progression.
 	onAnimationProgress: function(){},
@@ -241,10 +263,8 @@ var options = {
 	datasetFill : true,
 
 	//String - A legend template
-	legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<data.datasets.length; i++){%><li><span style=\"background-color:<%=data.datasets[i].strokeColor%>\"></span><%if(data.datasets[i].label){%><%=data.datasets[i].label%><%}%></li><%}%></ul>"
-
+	legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
 };
 
-
-
+setTimeout(graphUpdate(), 60000);
 
