@@ -35,7 +35,7 @@ nav h1 {
 main .container {
 	padding: 10px;
 	background-color: #fff;
-	margin: 20px 5%;
+	margin: 5% 5%;
 	text-align: center;
 	box-shadow: 0px 0px 28px 0px rgba(50, 50, 50, 0.5);
 	border-color: #aaa;
@@ -58,6 +58,19 @@ main .container {
 	margin:5px;
 	color: #666;
 	box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.5);
+}
+
+footer {
+	text-align: center;
+	position: relative;
+	bottom:20;
+	color:#666;
+	padding-bottom: 5px;
+}
+
+.footer {
+	font-size: 10px;
+	line-height: auto;
 }
 
 canvas {
