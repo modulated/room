@@ -1,88 +1,42 @@
-//JSON Load
-var graphUpdate = function() { 
+"use strict"
+
+// Set canvas context
+var ctx = document.getElementById('chart-1').getContext('2d');
+
+//  Get JSON and parse
+
+var getData = function(page) {
 	var jsonResponse = $.ajax({
-		url: 'http://data.sparkfun.com/output/MGwwxLpvNmcMrvEm2dYV.json?page=1',
+		url: 'http://data.sparkfun.com/output/MGwwxLpvNmcMrvEm2dYV.json?page='+page,
 		dataType: 'json'
-	})
-	.done(function() {
-		//console.log("success");
-		//console.dir(jsonResponse);
+	}).success(function () {
 
-		var data = {
+		parseData(jsonResponse);
 		
-			labels: [],
-
-			datasets: [
-					{
-						label: "temp",
-						fillColor: "rgba(220,220,220,0.2)",
-						strokeColor: "rgba(220,220,220,1)",
-						pointColor: "rgba(220,220,220,1)",
-						pointStrokeColor: "#fff",
-						pointHighlightFill: "#fff",
-						pointHighlightStroke: "rgba(220,220,220,1)",
-						data: []
-					},
-					{
-						label: "sound",
-						fillColor: "rgba(151,187,205,0.2)",
-						strokeColor: "rgba(151,187,205,1)",
-						pointColor: "rgba(151,187,205,1)",
-						pointStrokeColor: "#fff",
-						pointHighlightFill: "#fff",
-						pointHighlightStroke: "rgba(151,187,205,1)",
-						data: []
-					},
-				/*	{
-						label: "gas",
-						fillColor: "rgba(151,187,205,0.0)",
-						strokeColor: "rgba(151,187,205,1)",
-						pointColor: "rgba(151,187,205,1)",
-						pointStrokeColor: "#fff",
-						pointHighlightFill: "#fff",
-						pointHighlightStroke: "rgba(151,187,205,1)",
-						data: []
-					},*/
-					{
-						label: "light",
-						fillColor: "rgba(205,187,142,0.2)",
-						strokeColor: "rgba(205,187,142,1)",
-						pointColor: "rgba(205,187,142,1)",
-						pointStrokeColor: "#fff",
-						pointHighlightFill: "#fff",
-						pointHighlightStroke: "rgba(205,187,142,1)",
-						data: []
-					}
-				]
-		};
-
-		//fill x axis labels from data
-		// TODO - convert timestamp to string
-		
-		for (var i=0; i < jsonResponse.responseJSON.length; i++) {
-			var time = moment(jsonResponse.responseJSON[i].timestamp);
-			data.labels[i] = moment(time).format("h:mma, DD.MM.YY");
+		if (myChart1==null) {
+			var myChart1 = new Chart(ctx).Line(initData, initOptions);
 		}
-
-		//parse data for each variable
-		for (var i=0; i < data.datasets.length; i++) {
-			for (var j=0; j < jsonResponse.responseJSON.length; j++) {
-				data.datasets[i].data[j] = jsonResponse.responseJSON[j][data.datasets[i].label];
-				// console.log(jsonResponse.responseJSON[j][data.datasets[i].label]);
-			}
-		}
-
-		//render chart when data ready
-		var myChart1 = new Chart(ctx).Line(data, options);
-	})
-
-	.fail(function() {
-		console.log("error");
+		else myChart1.update();
 	});
 };
 
-// Chart GLobals Config
+var parseData = function (data) {
 
+	for (var i=0; i < data.responseJSON.length; i++) {
+		var time = moment(data.responseJSON[i].timestamp);
+		initData.labels[i] = moment(time).format("Do, HH:mm");
+	};
+
+	//parse data for each variable
+	for (var i=0; i < initData.datasets.length; i++) {
+		for (var j=0; j < data.responseJSON.length; j++) {
+			initData.datasets[i].data[j] = data.responseJSON[j][initData.datasets[i].label];
+			//console.log(data.responseJSON[j][initData.datasets[i].label]);
+		}
+	}
+};
+
+// Chart Globals Config
 Chart.defaults.global = {
 	// Boolean - Whether to animate the chart
 	animation: true,
@@ -137,10 +91,10 @@ Chart.defaults.global = {
 	scaleFontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
 
 	// Number - Scale label font size in pixels
-	scaleFontSize: 12,
+	scaleFontSize: 10,
 
 	// String - Scale label font weight style
-	scaleFontStyle: "normal",
+	scaleFontStyle: "light",
 
 	// String - Scale label font colour
 	scaleFontColor: "#666",
@@ -215,10 +169,55 @@ Chart.defaults.global = {
 	onAnimationComplete: function(){}
 }
 
-var ctx = document.getElementById('chart-1').getContext('2d');
+var initData = {
+	
+	labels: [],
 
+	datasets: [
+		{
+			label: "temp",
+			fillColor: "rgba(220,220,220,0.2)",
+			strokeColor: "rgba(220,220,220,1)",
+			pointColor: "rgba(220,220,220,1)",
+			pointStrokeColor: "#fff",
+			pointHighlightFill: "#fff",
+			pointHighlightStroke: "rgba(220,220,220,1)",
+			data: [1]
+		},
+		{
+			label: "sound",
+			fillColor: "rgba(151,187,205,0.2)",
+			strokeColor: "rgba(151,187,205,1)",
+			pointColor: "rgba(151,187,205,1)",
+			pointStrokeColor: "#fff",
+			pointHighlightFill: "#fff",
+			pointHighlightStroke: "rgba(151,187,205,1)",
+			data: [1]
+		},
+	/*	{
+			label: "gas",
+			fillColor: "rgba(151,187,205,0.0)",
+			strokeColor: "rgba(151,187,205,1)",
+			pointColor: "rgba(151,187,205,1)",
+			pointStrokeColor: "#fff",
+			pointHighlightFill: "#fff",
+			pointHighlightStroke: "rgba(151,187,205,1)",
+			data: []
+		},*/
+		{
+			label: "light",
+			fillColor: "rgba(205,187,142,0.2)",
+			strokeColor: "rgba(205,187,142,1)",
+			pointColor: "rgba(205,187,142,1)",
+			pointStrokeColor: "#fff",
+			pointHighlightFill: "#fff",
+			pointHighlightStroke: "rgba(205,187,142,1)",
+			data: [1]
+		}
+	]
+};
 
-var options = {
+var initOptions = {
 
 	///Boolean - Whether grid lines are shown across the chart
 	scaleShowGridLines : true,
@@ -266,6 +265,6 @@ var options = {
 	legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
 };
 
-graphUpdate();
-setInterval(graphUpdate, 60000);
+getData(0);
 
+setInterval(function() {getData(1); console.log('update')}, 60000);
