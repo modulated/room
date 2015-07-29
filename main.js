@@ -4,7 +4,6 @@
 var ctx = document.getElementById('chart-1').getContext('2d');
 
 //  Get JSON and parse
-
 var getData = function(page) {
 	var jsonResponse = $.ajax({
 		url: 'http://data.sparkfun.com/output/MGwwxLpvNmcMrvEm2dYV.json?page='+page,
@@ -18,6 +17,7 @@ var getData = function(page) {
 		}
 		else myChart1.update();
 	});
+
 };
 
 var parseData = function (data) {
@@ -34,6 +34,18 @@ var parseData = function (data) {
 			//console.log(data.responseJSON[j][initData.datasets[i].label]);
 		}
 	}
+
+	// Regulate dec to %
+	for (var i = 0; i < initData.datasets[1].data.length; i++){
+		initData.datasets[1].data[i] *= 100;
+		initData.datasets[2].data[i] *= 100;
+	}
+
+	// Metric get and set
+	$('#metric1').text('Current Temp: ' + data.responseJSON[0]['temp'] + '°C');
+	$('#metric2').text('Current Temp: ' + data.responseJSON[0]['sound']*100 + '%');
+	$('#metric3').text('Current Temp: ' + data.responseJSON[0]['light']*100 + '%');
+
 };
 
 // Chart Globals Config
