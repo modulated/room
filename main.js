@@ -38,12 +38,14 @@ var parseData = function (data) {
 	// Regulate dec to %
 	for (var i = 0; i < initData.datasets[1].data.length; i++){
 		initData.datasets[1].data[i] = Math.floor(initData.datasets[1].data[i] * 100);
-		initData.datasets[2].data[i] = Math.floor(initData.datasets[2].data[i] * 100);	}
+		initData.datasets[2].data[i] = Math.floor(initData.datasets[2].data[i] * 100);
+		initData.datasets[3].data[i] = Math.floor(initData.datasets[3].data[i] * 100);	}
 
 	// Metric get and set
 	$('#metric1').text('Current Temp: ' + data.responseJSON[0]['temp'] + '°C');
 	$('#metric2').text('Current Sound: ' + Math.floor(data.responseJSON[0]['sound']*100) + '%');
 	$('#metric3').text('Current Light: ' + Math.floor(data.responseJSON[0]['light']*100) + '%');
+	$('#metric4').text('Current Gas: ' + Math.floor(data.responseJSON[0]['gas']*100) + '%');
 
 };
 
@@ -205,16 +207,16 @@ var initData = {
 			pointHighlightStroke: "rgba(151,187,205,1)",
 			data: [1]
 		},
-	/*	{
+		{
 			label: "gas",
-			fillColor: "rgba(151,187,205,0.0)",
-			strokeColor: "rgba(151,187,205,1)",
-			pointColor: "rgba(151,187,205,1)",
+			fillColor: "rgba(151,205,151,0.0)",
+			strokeColor: "rgba(151,205,151,1)",
+			pointColor: "rgba(151,205,151,1)",
 			pointStrokeColor: "#fff",
 			pointHighlightFill: "#fff",
-			pointHighlightStroke: "rgba(151,187,205,1)",
-			data: []
-		},*/
+			pointHighlightStroke: "rgba(151,205,151,1)",
+			data: [1]
+		},
 		{
 			label: "light",
 			fillColor: "rgba(205,187,142,0.2)",
