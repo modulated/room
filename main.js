@@ -1,5 +1,8 @@
 "use strict"
 
+
+
+
 // Set canvas context
 var ctx = document.getElementById('chart-1').getContext('2d');
 
@@ -23,19 +26,39 @@ var getData = function(page) {
 var parseData = function (data) {
 
 	for (var i=0; i < data.responseJSON.length; i++) {
-		var time = moment(data.responseJSON[i].timestamp);
-		initData.labels[i] = moment(time).format("Do, HH:mm");
-	};
+		
+		if (i % initOptions.labelInterval === 0) 
+		{	
+			var time = moment(data.responseJSON[i].timestamp);
+			initData.labels[i] = moment(time).format("HH:mm Do");
+		}
+		
+		else if (i == data.responseJSON.length-1)
+		{	
+			var time = moment(data.responseJSON[i].timestamp);
+			initData.labels[i] = moment(time).format("HH:mm Do");
+		}
 
+		else 
+		{
+			initData.labels[i] = '';	
+		}
+	};
+	
+	// TODO - filter by pagination settings
+	
 	//parse data for each variable
 	for (var i=0; i < initData.datasets.length; i++) {
-		for (var j=0; j < data.responseJSON.length; j++) {
+		// if data returned is less than dataLength use that value instead
+		for (var j=0; j < ((data.responseJSON.length < initOptions.dataLength) ? data.responseJSON.length : initOptions.dataLength); j++) {
+			
+			// console.log(i,j)
 			initData.datasets[i].data[j] = data.responseJSON[j][initData.datasets[i].label];
 			//console.log(data.responseJSON[j][initData.datasets[i].label]);
 		}
 	}
 
-	// Regulate dec to %
+	// Convert dec to %
 	for (var i = 0; i < initData.datasets[1].data.length; i++){
 		initData.datasets[1].data[i] = Math.floor(initData.datasets[1].data[i] * 100);
 		initData.datasets[2].data[i] = Math.floor(initData.datasets[2].data[i] * 100);
@@ -182,6 +205,7 @@ Chart.defaults.global = {
 	onAnimationComplete: function(){}
 }
 
+
 var initData = {
 	
 	labels: [],
@@ -231,6 +255,12 @@ var initData = {
 };
 
 var initOptions = {
+	
+	// Amount of data points to display per page
+	dataLength : 120,
+
+	// How often to show labels
+	labelInterval : 5,
 
 	///Boolean - Whether grid lines are shown across the chart
 	scaleShowGridLines : true,
@@ -266,7 +296,7 @@ var initOptions = {
 	pointHitDetectionRadius : 20,
 
 	//Boolean - Whether to show a stroke for datasets
-	datasetStroke : true,
+	datasetStroke : false,
 
 	//Number - Pixel width of dataset stroke
 	datasetStrokeWidth : 2,
